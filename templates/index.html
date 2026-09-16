@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#07070b" />
+<title>{{ title }}</title>
+<meta name="description" content="WARDOGS 今晚开不开？一人一票，投完见分晓。" />
+<meta property="og:title" content="{{ title }}" />
+<meta property="og:description" content="今晚开不开？一人一票，投完见分晓。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐺</text></svg>" />
+</head>
+<body>
+
+<!-- 背景层 -->
+<div class="bg" aria-hidden="true">
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="grid-lines"></div>
+  <div class="grain"></div>
+  <div class="spotlight" id="spotlight"></div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<main class="shell">
+
+  <header class="hero reveal">
+    <div class="badge">
+      <span class="pulse"></span>
+      <span id="liveLabel">实时投票 · 一人一票</span>
+    </div>
+
+    <h1 class="title">
+      <span class="line">要不要玩</span>
+      <span class="line grad">WARDOGS</span>
+      <span class="line">？</span>
+    </h1>
+
+    <p class="sub">
+      每人可以投一次 &nbsp;选完就能看到大家的答案，随时可以改主意。
+    </p>
+
+    <div class="meta">
+      <div class="meta-item"><b id="totalNum">0</b><span>已投人数</span></div>
+      <div class="sep"></div>
+      <div class="meta-item"><b id="yesNum">0</b><span>确定要开</span></div>
+      <div class="sep"></div>
+      <div class="meta-item"><b id="deadlineTxt">不限时</b><span>截止时间</span></div>
+    </div>
+  </header>
+
+  <!-- 投票卡片 -->
+  <section class="panel reveal" id="votePanel" style="--d:.08s">
+    <div class="panel-head">
+      <h2>1 · 选一个</h2>
+      <span class="hint" id="myHint">还没投票</span>
+    </div>
+
+    <div class="options" id="options"></div>
+
+    <div class="form">
+      <div class="field">
+        <label for="name">你的名字</label>
+        <input id="name" type="text" maxlength="{{ name_max_len }}" autocomplete="off"
+               spellcheck="false" placeholder="例如：绿大叔OTTO" />
+        <span class="counter"><span id="nameLen">0</span>/{{ name_max_len }}</span>
+      </div>
+      <div class="field grow">
+        <label for="note">留句话（可选）</label>
+        <input id="note" type="text" maxlength="40" autocomplete="off"
+               placeholder="不知道正在修电脑 / 你们传统的程度令我羡慕" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="submitBtn">
+        <span class="btn-text">投出这一票</span>
+        <span class="btn-glow"></span>
+      </button>
+      <button class="btn ghost" id="withdrawBtn" hidden>撤回我的票</button>
+    </div>
+    <p class="tiny">🔒 用浏览器签名标识 + 昵称双重去重，同一个人重复投票会直接覆盖旧票。</p>
+  </section>
+
+  <!-- 结果 -->
+  <section class="panel reveal" id="resultPanel" style="--d:.16s">
+    <div class="panel-head">
+      <h2>2 · 当前战况</h2>
+      <span class="hint" id="updatedAt">等待数据…</span>
+    </div>
+    <div class="bars" id="bars"></div>
+    <div class="verdict" id="verdict"></div>
+  </section>
+
+  <!-- 名单 -->
+  <section class="panel reveal" id="peoplePanel" style="--d:.24s">
+    <div class="panel-head">
+      <h2>3 · 都谁投了</h2>
+      <span class="hint" id="peopleHint"></span>
+    </div>
+    <div class="people" id="people"></div>
+    <div class="empty" id="peopleEmpty">还没有人投票，做第一个吧 🐺</div>
+  </section>
+
+  <footer class="foot">
+    <span>WARDOGS Squad · 一起开黑</span>
+    <button class="linkish" id="adminBtn" title="清空全部投票">⚙ 重置</button>
+  </footer>
+</main>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script id="bootstrap" type="application/json">{{ state | tojson }}</script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
