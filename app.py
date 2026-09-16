@@ -396,7 +396,7 @@ if __name__ == "__main__":
     print("=" * 56)
     print(f"  {APP_TITLE}")
     print(f"  数据库   : {DB_PATH}")
-    print(f"  管理口令 : {ADMIN_TOKEN}   (重置: 页面底部 ⚙ / POST /api/admin/reset)")
+    print(f"  管理口令 : {ADMIN_TOKEN}   (重置: 页面底部 / POST /api/admin/reset)")
     print(f"  同设备限制: {'开' if STRICT_IP else '关'}")
     if DEADLINE_TS:
         print(f"  截止时间 : {datetime.fromtimestamp(DEADLINE_TS)}")
